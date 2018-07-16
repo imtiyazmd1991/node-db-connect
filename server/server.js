@@ -21,7 +21,7 @@ var {todo} = require('./models/todos');
 var {user} =  require('./models/Users');
 
 var express = require('express');
-var app = express();
+// var app = express().json();
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
