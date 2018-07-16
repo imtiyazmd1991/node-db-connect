@@ -64,6 +64,10 @@ describe('It has to get the todos', (done)=>{
 			expect(response.body.docs.length).toBe(2);
 			// console.log(response.body.docs.length);
 			// done();
+		},(err)=>{
+			if(err){
+			return done(err);
+		}
 		})
 		.end(done)
 	});
