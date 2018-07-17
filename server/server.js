@@ -25,6 +25,8 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 
+var port = process.env.PORT || 3000;
+
 app.use(bodyParser.json());
 
 app.use((request, response, next)=>{
@@ -76,7 +78,7 @@ app.post('/todos', (req, res)=>{
 
 });
 
-app.listen(3000, ()=>{
+app.listen(port , ()=>{
   console.log('started app on port 3000');
 });
 
