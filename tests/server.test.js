@@ -9,6 +9,9 @@ var testTodos = [{
 	text: 'This is a test todo for get 1'
 },{
 	text: 'This is a test todo for get 2'
+},{
+	_id: '5b4c0214c2aa770990d1e9fe',
+	text: 'This is a test todo for get 2'
 }];
 
 beforeEach(
@@ -61,13 +64,27 @@ describe('It has to get the todos', (done)=>{
 		.get('/todos')
 		.expect(200)
 		.expect((response)=>{
-			expect(response.body.docs.length).toBe(2);
+			expect(response.body.docs.length).toBe(3);
 			// console.log(response.body.docs.length);
 			// done();
 		},(err)=>{
 			if(err){
 			return done(err);
 		}
+		})
+		.end(done)
+	});
+});
+
+
+describe('get individual todo', ()=>{
+	it('has to return the todo for the specified get request', (done)=>{
+		request(app)
+		.get('/todos/5b4c0214c2aa770990d1e9fe')
+		.expect(200)
+		.expect((response)=>{
+			// console.log(response.body)
+			expect(response.body.text).toBe('This is a test todo for get 2');
 		})
 		.end(done)
 	});
