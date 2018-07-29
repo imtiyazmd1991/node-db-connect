@@ -16,6 +16,7 @@
 //   console.log('app started on port 3000');
 // });
 require('./config/config.js');
+
 var { mongoose } = require('./db/mongoose');
 var { todo } = require('./models/todos');
 var { users } = require('./models/users');
@@ -72,11 +73,14 @@ app.post('/users', (req, res) => {
   user.save().then((user) => {
     // res.send(user);
     user.generateAuthToken().then((token) => {
+      console.log('inside auth token generation');
       res.header('x-auth', token).status(200).send(user.toJSON());
     }).catch((err) => {
+      console.log('inside catch auth token generation');
       res.status(400).send(err);
     })
   }).catch((err) => {
+    console.log('inside save error block');
     // console.log('error');
     res.status(400).send(err);
   })
