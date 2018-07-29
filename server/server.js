@@ -177,7 +177,7 @@ app.post('/todos', authenticate, (req, res) => {
 });
 
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('started app on port ', process.env.PORT);
 });
 
