@@ -1,20 +1,3 @@
-// var {mongoose} = require('./db/mongoose');
-// var {Todo} = require('./models/Todo');
-// var {Users} = require('./models/Users');
-//
-// var express = require('express');
-// var bodyParser = require('body-parser');
-//
-// var app = express();
-//
-// app.post('todos', (request, response)=>{
-//
-// })
-//
-
-// app.listen(3000,()=>{
-//   console.log('app started on port 3000');
-// });
 require('./config/config.js');
 
 var { mongoose } = require('./db/mongoose');
@@ -30,18 +13,13 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 
-// var port = process.env.PORT || 3000;
-
 app.use(bodyParser.json());
 
 app.use((request, response, next) => {
-  // console.log(request.body);
   next();
 });
 
 app.delete('/users/me/logout', authenticate, (req, res)=>{
-  // var users = req.user;
-  // console.log('req.user is', req.token);
   req.user.deleteByToken(req.token).then((user)=>{
     res.status(200).send(user);
   }).catch((err)=>{
@@ -50,11 +28,8 @@ app.delete('/users/me/logout', authenticate, (req, res)=>{
 });
 
 app.post('/users/login', (req, res) => {
-  // console.log(req.body);
   var email = req.body.email;
   var pass = req.body.password;
-  // console.log(email, password);
-  // var dbpassword;
   users.findByPassword(email, pass).then((user) => {
     user.generateAuthToken().then((token) => {
       res.header('x-auth', token).status(200).send(user);
@@ -71,17 +46,12 @@ app.get('/users/me', authenticate, (req, res) => {
 app.post('/users', (req, res) => {
   var user = new users(_.pick(req.body, ['email', 'password']));
   user.save().then((user) => {
-    // res.send(user);
     user.generateAuthToken().then((token) => {
-      console.log('inside auth token generation');
       res.header('x-auth', token).status(200).send(user.toJSON());
     }).catch((err) => {
-      console.log('inside catch auth token generation');
       res.status(400).send(err);
     })
   }).catch((err) => {
-    console.log('inside save error block');
-    // console.log('error');
     res.status(400).send(err);
   })
 });
@@ -156,7 +126,7 @@ app.get('/todos', authenticate, (req, res) => {
   todo.find({_created:req.user._id}).then((docs) => {
     res.send({ docs })
   }, (err) => {
-    if (err) {
+    if (!err && err !== null) {
       res.status(400).send(err);
     }
   });
@@ -173,7 +143,7 @@ app.post('/todos', authenticate, (req, res) => {
   Todo.save().then((docs) => {
     res.send(docs);
   }).catch((err) => {
-    if (err) {
+    if (!err && err !== null) {
       res.status(400).send(err);
     }
   });

@@ -21,10 +21,13 @@ var testUsers = [
     },{
         _id: new ObjectID(user3),
         email: "mimtiyazmd1993@gmail.com",
-        password: "imtiyazmd1993"
+        password: "imtiyazmd1993",
+        tokens:[{
+            access: 'auth',
+            token: jwt.sign({_id: user3, access:'auth'}, process.env.secretKey)
+        }]
     }
 ];
-
 
 var testTodos = [{
     _created: new ObjectID(user1),
@@ -35,7 +38,7 @@ var testTodos = [{
 }, {
     _created: new ObjectID(user3),
 	_id: '5b4c0214c2aa770990d1e9fe',
-	text: 'This is a test todo for get 2'
+	text: 'This is a test todo for get 3'
 }];
 
 module.exports = {

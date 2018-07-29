@@ -2,12 +2,10 @@
     "test":{
         "secretKey": "theUltimateSecret",
         "PORT" : "3000",
-        "dbName": "TodoAppTest",
         "MONGODB_URI": "mongodb://localhost:27017/TodoAppTest"
     },"development":{
         "secretKey": "theUltimateSecret",
         "PORT": "3000",
-        "dbName": "TodoApp",
         "MONGODB_URI": "mongodb://localhost:27017/TodoApp"
     }
 }

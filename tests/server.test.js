@@ -14,13 +14,18 @@ beforeEach(
 			users.insertMany(testUsers[1]).then((users)=>{
 			}).catch((err)=>{
 				return done(err);
-			})
+			});
+			users.insertMany(testUsers[2]).then((users)=>{
+			}).catch((err)=>{
+				return done(err);
+			});
 		}).catch((err)=>{
 			return done(err);
 		});
 
 		todo.remove({}).then(() => {
 				todo.insertMany(testTodos).then((todos) => {
+					// console.log(todos);
 					return done();
 				}, (err) => {
 					return done(err);
@@ -36,7 +41,6 @@ describe('create a new user', ()=>{
 		.post('/users')
 		.send(testUsers[0])
 		.expect((response)=>{
-			console.log(response.body)
 			expect(response.body.email).toBe('mimtiyazmd1991@gmail.com');
 		})
 		.end((err, response)=>{
@@ -59,7 +63,6 @@ describe('insert data into todo collection', () => {
 		.send({text: text})
 		.expect(200)
 		.expect((response) => {
-			// console.log(response.body.text)
 			expect(response.body.text).toBe(text);
 		}, (err) => {
 			if (err) { 
@@ -69,43 +72,46 @@ describe('insert data into todo collection', () => {
 		}) 
 });
 
-// describe('It has to get the todos', (done) => {
-// 	it('perform a get of the todos', (done) => {
-// 		request(app)
-// 			.get('/todos')
-// 			.expect(200)
-// 			.expect((response) => {
-// 				expect(response.body.docs.length).toBe(3);
-// 			}, (err) => {
-// 				if (err) {
-// 					return done(err);
-// 				}
-// 			})
-// 			.end(done)
-// 	});
-// });
+describe('It has to get the todos', (done) => {
+	it('perform a get of the todos', (done) => {
+		request(app)
+			.get('/todos')
+			.set('x-auth', testUsers[2].tokens[0].token)
+			.expect(200)
+			.expect((response) => {
+				expect(response.body.docs.length).toBe(1);
+			}, (err) => {
+				if (err) {
+					return done(err);
+				}
+			})
+			.end(done)
+	});
+});
 
 
-// describe('get individual todo', () => {
-// 	it('has to return the todo for the specified get request', (done) => {
-// 		request(app)
-// 			.get('/todos/5b4c0214c2aa770990d1e9fe')
-// 			.expect(200)
-// 			.expect((response) => {
-// 				expect(response.body.text).toBe('This is a test todo for get 2');
-// 			})
-// 			.end(done)
-// 	});
-// });
+describe('get individual todo', () => {
+	it('has to return the todo for the specified get request', (done) => {
+		request(app)
+			.get('/todos/5b4c0214c2aa770990d1e9fe')
+			.set('x-auth', testUsers[2].tokens[0].token)
+			.expect(200)
+			.expect((response) => {
+				expect(response.body[0].text).toBe('This is a test todo for get 3');
+			})
+			.end(done)
+	});
+});
 
-// describe('Delete request', () => {
-// 	it('has to delete the record by using object id', (done) => {
-// 		request(app)
-// 			.delete('/todos/5b4c0214c2aa770990d1e9fe')
-// 			.expect(200)
-// 			.expect((response) => {
-// 				expect(response.body._id).toBe('5b4c0214c2aa770990d1e9fe');
-// 			})
-// 			.end(done)
-// 	})
-// });
+describe('Delete request', () => {
+	it('has to delete the record by using object id', (done) => {
+		request(app)
+			.delete('/todos/5b4c0214c2aa770990d1e9fe')
+			.set('x-auth', testUsers[2].tokens[0].token)
+			.expect(200)
+			.expect((response) => {
+				expect(response.body._id).toBe('5b4c0214c2aa770990d1e9fe');
+			})
+			.end(done)
+	})
+});

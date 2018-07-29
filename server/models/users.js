@@ -43,8 +43,6 @@ var userSchema = mongoose.Schema({
 userSchema.methods.toJSON = function () {
 	var user = this;
 	var body = _.pick(this, ['_id', 'email']);
-	// console.log(body);
-	// return {email: body.email, password: body.password}
 	return body
 };
 
@@ -71,65 +69,19 @@ userSchema.methods.deleteByToken = function (token) {
 	})
 };
 
-// userSchema.statics.findByToken = function(token){
-// 	// console.log('inside');
-// 	var user = this;
-// 	var decoded;
-
-// 	try{
-// 			decoded = jwt.verify(token, 'abc123');		
-// 			console.log(new ObjectID.createFromHexString(decoded._id));
-// 		}catch(e){
-// 			return Promise.reject();
-// 		}
-// 	return user.findOne({
-// 		'_id': new ObjectID.createFromHexString(decoded._id),
-// 		'tokens.token': token,
-// 		'access': 'auth'
-// 	});
-// };
-
-// userSchema.statics.findByToken = function (token) {
-// 	var user = this;
-// 	var decoded;
-
-// 	try {
-// 		decoded = jwt.verify(token, 'abc123');
-// 	} catch (e) {
-// 		return Promise.reject();
-// 	}
-// 	console.log(decoded._id);
-// 	return user.findById({
-// 		'_id': decoded._id
-// 	}).then((users) => {
-// 		if (users.tokens[1].token === token && users.tokens[1].access === 'auth') {
-// 			console.log('authenticated');
-// 			return users;
-// 		} else {
-// 			return Promise.reject();
-// 		}
-// 	})
-// };
-
-
 userSchema.statics.findByToken = function (token) {
 	var user = this;
 	var decoded;
-	// console.log('1')
 	try {
 		decoded = jwt.verify(token, process.env.secretKey);
 	} catch (e) {
-		// console.log('2')
 		return Promise.reject();
 	}
-	// console.log(decoded._id);
 	return user.findOne({
 		'_id': decoded._id,
 		'tokens.token': token
 	}).then((users) => {
 		if (users) {
-			// console.log('3')
-			// console.log(users);
 			return users;
 		} else {
 			return Promise.reject();
